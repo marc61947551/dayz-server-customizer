@@ -45,8 +45,10 @@ if($uploadOk) {
 	}
 
 	if (move_uploaded_file($_FILES["uploadedfile"]["tmp_name"], $target_file)) {
+
 		chmod($target_file, 0777);
 		$xmlSave = simplexml_load_file('uploads/'.$_COOKIE['cookiemonster'].'/'.$filename.'_'.$_SESSION["hash"].'.xml') or throwError("Internal error");
+
 		foreach($xmlSave->children() as $item) {
 			$obj = get_object_vars($item);
 
@@ -76,6 +78,7 @@ if($uploadOk) {
 			$data->{$itemName}->usage = $usage; // Possible array
 			$data->{$itemName}->tier = $tier; // Possible array
 		}
+
 		$response->data = $data;
 		$response->fileType = $filename;
 		$janne = json_encode($response, JSON_PRETTY_PRINT);
