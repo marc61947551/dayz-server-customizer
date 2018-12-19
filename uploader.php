@@ -49,18 +49,32 @@ if($uploadOk) {
 		$xmlSave = simplexml_load_file('uploads/'.$_COOKIE['cookiemonster'].'/'.$filename.'_'.$_SESSION["hash"].'.xml') or throwError("Internal error");
 		foreach($xmlSave->children() as $item) {
 			$obj = get_object_vars($item);
-			$category = (string)$item->category[name];
-			if ($category === "") {
-				$category = null;
-			}
+
+			$c = (string)$item->category[name];
+			$t = (string)$item->tag[name];
+			$u = (string)$item->usage[name];
+			$v = (string)$item->value[name];
+
+			$category = ($c) ?: NULL;
+			$tag = ($t) ?: NULL;
+			$usage = ($u) ?: NULL;
+			$tier = ($v) ?: NULL;
+
 			// DUDE WTF IS THIS PIECE OF SHIT
 			$itemName = $item[name];
+
 			$data->{$itemName}->nominal = $obj['nominal'];
-			$data->{$itemName}->min = $obj['min'];
-			$data->{$itemName}->restock = $obj['restock'];
-			$data->{$itemName}->cost = $obj['cost'];
-			$data->{$itemName}->category = $category;
 			$data->{$itemName}->lifetime = $obj['lifetime'];
+			$data->{$itemName}->restock = $obj['restock'];
+			$data->{$itemName}->min = $obj['min'];
+			$data->{$itemName}->quantmin = $obj['quantmin'];
+			$data->{$itemName}->quantmax = $obj['quantmax'];
+			$data->{$itemName}->cost = $obj['cost'];
+
+			$data->{$itemName}->category = $category;
+			$data->{$itemName}->tag = $tag; // Possible array
+			$data->{$itemName}->usage = $usage; // Possible array
+			$data->{$itemName}->tier = $tier; // Possible array
 		}
 		$response->data = $data;
 		$response->fileType = $filename;
