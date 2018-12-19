@@ -33,6 +33,10 @@
 
 	$users = count(glob("uploads/*", GLOB_ONLYDIR));
 	$filecount = $files['total_files'] - $users;
+
+	$version = fopen("version", "r");
+	$versionNumber = fread($version,filesize("version"));
+	fclose($version);
 ?>	
 <section class="header">
 	<div class="container">
@@ -45,6 +49,6 @@
 </section>
 
 <section class="footer">
-		<p><code><a href="https://github.com/niklashenrixon/dayz-server-customizer/releases" target="_blank">[release 1.0.1]</a> ~ <a href="https://www.reddit.com/r/dayz/comments/a7fsvt/dayz_standalone_server_customizer_httpsdayzskyn1se/" target="_blank">Report suggestions or problems here plis 🐒🐒🐒🐒</a></code></p>
+		<p><code><a href="https://github.com/niklashenrixon/dayz-server-customizer/releases" target="_blank">[release <?PHP echo $versionNumber ?>]</a> ~ <a href="https://www.reddit.com/r/dayz/comments/a7fsvt/dayz_standalone_server_customizer_httpsdayzskyn1se/" target="_blank">Report suggestions or problems here plis 🐒🐒🐒🐒</a></code></p>
 		<p><code><a href="http://buymeacoff.ee/tHoAcuy" target="_blank">Buy us a coffee 🍺</a></code></p>
 </section>
