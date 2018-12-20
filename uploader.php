@@ -1,11 +1,7 @@
 <?PHP
+require_once('loader.php');
 session_start();
 header('Content-Type: application/json');
-
-function throwError($msg) {
-	$message = '{"error":"'.$msg.'"}';
-	exit($message);
-}
 
 $uploadOk = 1;
 $filetype = strtolower(pathinfo($_FILES["uploadedfile"]["name"], PATHINFO_EXTENSION));
