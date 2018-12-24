@@ -1,7 +1,8 @@
+"use strict";
+
 window.addEventListener("load", function () {
   // IF DRAG-DROP UPLOAD SUPPORTED
   if (window.File && window.FileReader && window.FileList && window.Blob) {
-
     /* [VISUAL - HIGHLIGHT DROP ZONE ON HOVER] */
     document.addEventListener("dragenter", function (e) {
       e.preventDefault();
@@ -13,53 +14,61 @@ window.addEventListener("load", function () {
       e.stopPropagation();
       document.body.classList.remove('highlight');
     });
-
     /* [UPLOAD MECHANICS] */
     // STOP THE DEFAULT BROWSER ACTION FROM OPENING THE FILE
+
     document.addEventListener("dragover", function (e) {
       e.preventDefault();
       e.stopPropagation();
-    });
-
-    // ADD OUR OWN UPLOAD ACTION
+    }); // ADD OUR OWN UPLOAD ACTION
 
     document.addEventListener("drop", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      document.body.classList.remove('highlight');
-      document.body.classList.add('loading');
-      // RUN THROUGH THE DROPPED FILES + AJAX UPLOAD
+
+      if (e.dataTransfer.files.length > 1) {
+        alert('Only upload one file')
+        return false
+      }
+
       for (var i = 0; i < e.dataTransfer.files.length; i++) {
+      document.body.classList.remove('highlight');
+      document.body.classList.add('loading'); // RUN THROUGH THE DROPPED FILES + AJAX UPLOAD
         var xhr = new XMLHttpRequest(),
             data = new FormData(),
-            fileName = e.dataTransfer.files[i].name
-
+            fileName = e.dataTransfer.files[i].name;
         data.append('uploadedfile', e.dataTransfer.files[i]);
         xhr.open('POST', 'uploader.php', true);
+
         xhr.onload = function (e) {
           document.body.classList.remove('loading');
+
           if (xhr.readyState === 4) {
             if (xhr.status === 200) {
               // SERVER RESPONSE
-              const response = JSON.parse(xhr.response)
-              if (response.error) {
+              var response = JSON.parse(xhr.response);
 
-                alert(response.error)
-                return 
+              if (response.error) {
+                alert(response.error);
+                return;
               }
 
-              window.XMLData = response
-              const evt = new CustomEvent('receiveData');
-              window.dispatchEvent(evt)
-              window.fileName = fileName
+              window.XMLData = response;
+              var evt = new CustomEvent('receiveData');
+              window.dispatchEvent(evt);
+              window.fileName = fileName;
             }
           }
         };
+
         xhr.onerror = function (e) {
           // ERROR
           // console.error(xhr.statusText);
           alert("Upload error!");
+          document.body.classList.remove('loading');
+          document.body.classList.add('highlight');
         };
+
         xhr.send(data);
       }
     });
@@ -67,4 +76,3 @@ window.addEventListener("load", function () {
     alert('Your browser is outdate, please update');
   }
 });
-
