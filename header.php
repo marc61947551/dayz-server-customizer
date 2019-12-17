@@ -33,8 +33,8 @@
 	$users = count(glob("uploads/*", GLOB_ONLYDIR));
 	$filecount = $files['total_files'] - $users;
 
-	$users = $users + 5058;
-	$filecount = $filecount + 30634;
+	$users = $users + 9609;
+	$filecount = $filecount + 59678;
 ?>	
 <section class="header">
 	<div class="container">
